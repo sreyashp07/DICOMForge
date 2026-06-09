@@ -8,16 +8,22 @@ export default function Home() {
 
   return (
     <main className="relative min-h-dvh overflow-hidden bg-ink text-peach">
-      <section className="flex min-h-dvh flex-col items-center justify-center gap-4 px-6 text-center">
-        <h1 className="text-3xl font-medium uppercase tracking-[0.45em] sm:text-5xl">
+      <section
+        style={{ opacity: loading ? 0 : 1, transition: "opacity 0.9s ease 0.05s" }}
+        className="flex min-h-dvh flex-col items-center justify-center gap-5 px-6 text-center"
+      >
+        <h1
+          style={{ fontFamily: "var(--font-syne)" }}
+          className="text-4xl font-bold uppercase tracking-[0.4em] sm:text-6xl"
+        >
           Dicom Forge
         </h1>
-        <p className="max-w-md text-sm tracking-wide text-mint">
-          DICOM to 3D STL. Landing page arrives in Phase 3.
+        <p className="max-w-md text-xs uppercase tracking-[0.2em] text-mint">
+          DICOM to 3D STL
         </p>
       </section>
 
-      {loading && <Loader onComplete={() => setLoading(false)} />}
+      <Loader onComplete={() => setLoading(false)} />
     </main>
   );
 }
