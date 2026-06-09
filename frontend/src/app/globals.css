@@ -17,7 +17,7 @@ html,
 body {
   background-color: var(--color-ink);
   color: var(--color-peach);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-family: var(--font-space), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
