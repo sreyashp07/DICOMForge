@@ -15,12 +15,20 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   return (
-    <main className="relative min-h-dvh overflow-x-hidden bg-ink text-peach">
+    <main className="relative min-h-dvh overflow-x-clip bg-ink text-peach">
       {!loading && <FerrofluidCanvas />}
 
       <div style={{ opacity: loading ? 0 : 1, transition: "opacity 0.9s ease 0.05s" }}>
-        <Hero />
-        <Manifesto />
+        <div className="sticky top-0">
+          <Hero />
+        </div>
+
+        <div
+          className="relative z-20 rounded-t-[28px] border-t border-mint/15 bg-ink"
+          style={{ boxShadow: "0 -34px 90px rgba(0, 0, 0, 0.65)" }}
+        >
+          <Manifesto />
+        </div>
       </div>
 
       <Loader onComplete={() => setLoading(false)} />
