@@ -9,6 +9,8 @@ export default function ScrambleText({
   autoStart = false,
   delay = 0,
   scrambleOnHover = false,
+  framesPerChar = 7,
+  glyphHold = 5,
   className = "",
   style,
 }: {
@@ -16,20 +18,38 @@ export default function ScrambleText({
   autoStart?: boolean;
   delay?: number;
   scrambleOnHover?: boolean;
+  framesPerChar?: number;
+  glyphHold?: number;
   className?: string;
   style?: React.CSSProperties;
 }) {
   const [display, setDisplay] = useState(text);
   const rafRef = useRef(0);
   const frameRef = useRef(0);
+  const glyphsRef = useRef<string[]>([]);
 
   const run = useCallback(() => {
     cancelAnimationFrame(rafRef.current);
     frameRef.current = 0;
-    const perChar = 3;
+    glyphsRef.current = text
+      .split("")
+      .map((c) =>
+        c === " " ? " " : GLYPHS[Math.floor(Math.random() * GLYPHS.length)]
+      );
+
     const tick = () => {
       frameRef.current += 1;
-      const resolved = Math.floor(frameRef.current / perChar);
+      const resolved = Math.floor(frameRef.current / framesPerChar);
+
+      if (frameRef.current % glyphHold === 0) {
+        for (let i = resolved; i < text.length; i++) {
+          if (text[i] !== " ") {
+            glyphsRef.current[i] =
+              GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+          }
+        }
+      }
+
       let out = "";
       for (let i = 0; i < text.length; i++) {
         if (text[i] === " ") {
@@ -37,10 +57,11 @@ export default function ScrambleText({
         } else if (i < resolved) {
           out += text[i];
         } else {
-          out += GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+          out += glyphsRef.current[i];
         }
       }
       setDisplay(out);
+
       if (resolved < text.length) {
         rafRef.current = requestAnimationFrame(tick);
       } else {
@@ -48,7 +69,7 @@ export default function ScrambleText({
       }
     };
     rafRef.current = requestAnimationFrame(tick);
-  }, [text]);
+  }, [text, framesPerChar, glyphHold]);
 
   useEffect(() => {
     if (!autoStart) return;
