@@ -42,3 +42,10 @@ body {
   background: var(--color-mint);
   color: var(--color-ink);
 }
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
