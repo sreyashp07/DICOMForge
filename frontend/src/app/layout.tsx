@@ -5,6 +5,7 @@ import "./globals.css";
 import PageTransition from "@/components/ui/PageTransition";
 import Menu from "@/components/ui/Menu";
 import CustomCursor from "@/components/ui/CustomCursor";
+import SmoothScroll from "@/components/ui/SmoothScroll";
 
 const clash = localFont({
   src: "../fonts/ClashDisplay-Variable.woff2",
@@ -26,10 +27,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${clash.variable} ${syne.variable} ${spaceGrotesk.variable}`}>
-        <PageTransition>
-          {children}
-          <Menu />
-        </PageTransition>
+        <SmoothScroll>
+          <PageTransition>
+            {children}
+            <Menu />
+          </PageTransition>
+        </SmoothScroll>
         <CustomCursor />
       </body>
     </html>
