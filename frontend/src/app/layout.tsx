@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Syne, Space_Grotesk } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
+import PageTransition from "@/components/ui/PageTransition";
+import Menu from "@/components/ui/Menu";
+import CustomCursor from "@/components/ui/CustomCursor";
 
 const clash = localFont({
   src: "../fonts/ClashDisplay-Variable.woff2",
@@ -13,7 +16,7 @@ const syne = Syne({ variable: "--font-syne", subsets: ["latin"] });
 const spaceGrotesk = Space_Grotesk({ variable: "--font-space", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "DicomForge — DICOM to 3D STL",
+  title: "DicomForge - DICOM to 3D STL",
   description: "Convert DICOM medical imaging into accurate 3D STL models.",
 };
 
@@ -23,7 +26,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${clash.variable} ${syne.variable} ${spaceGrotesk.variable}`}>
-        {children}
+        <PageTransition>
+          {children}
+          <Menu />
+        </PageTransition>
+        <CustomCursor />
       </body>
     </html>
   );

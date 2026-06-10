@@ -35,7 +35,6 @@ export default function Hero() {
         <span style={{ fontFamily: "var(--font-syne)" }} className="text-sm font-extrabold tracking-[0.2em] text-peach">
           DF
         </span>
-        <span>Forge / 01</span>
       </header>
 
       <div className="relative flex flex-1 flex-col justify-end pb-[12vh]">
