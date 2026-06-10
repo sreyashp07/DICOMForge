@@ -33,3 +33,12 @@ body {
   white-space: nowrap;
   border: 0;
 }
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none;
+}
+
+::selection {
+  background: var(--color-mint);
+  color: var(--color-ink);
+}
