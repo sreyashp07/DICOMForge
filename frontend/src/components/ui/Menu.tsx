@@ -4,6 +4,7 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { usePageTransition } from "@/components/ui/PageTransition";
+import ScrambleText from "@/components/ui/ScrambleText";
 
 const LINKS = [
   { href: "/", label: "The Forge", index: "01" },
@@ -131,7 +132,7 @@ export default function Menu() {
                         active ? "text-mint" : "text-peach"
                       }`}
                     >
-                      {link.label}
+                      <ScrambleText text={link.label} scrambleOnHover />
                     </motion.span>
                   </motion.button>
                 );
