@@ -115,6 +115,7 @@ export default function TechnologyPage() {
         className="mx-auto mt-[14vh] max-w-5xl"
       >
         <MediaFrame
+          src="/images/pipeline.jpg"
           alt="Diagram of the DicomForge processing pipeline"
           label="Asset 02 - Pipeline visual"
           note="1600 x 900 - volumetric render or pipeline diagram"
@@ -122,13 +123,13 @@ export default function TechnologyPage() {
       </motion.section>
 
       <div className="mx-auto mt-[12vh] flex max-w-5xl justify-end">
-        <button onClick={() => navigate("/insights")} className="group flex items-baseline gap-4">
+        <button onClick={() => navigate("/testimonials")} className="group flex items-baseline gap-4">
           <span className="text-[10px] uppercase tracking-[0.4em] text-mint">Next</span>
           <span
             style={{ fontFamily: "var(--font-clash)" }}
             className="text-[clamp(22px,3vw,38px)] font-semibold uppercase tracking-tight text-peach transition-transform duration-300 group-hover:translate-x-2"
           >
-            Insights
+            Testimonials
           </span>
         </button>
       </div>

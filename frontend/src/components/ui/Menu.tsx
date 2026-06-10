@@ -9,7 +9,7 @@ import ScrambleText from "@/components/ui/ScrambleText";
 const LINKS = [
   { href: "/", label: "The Forge", index: "01" },
   { href: "/technology", label: "Technology", index: "02" },
-  { href: "/insights", label: "Insights", index: "03" },
+  { href: "/testimonials", label: "Testimonials", index: "03" },
   { href: "/faq", label: "FAQ", index: "04" },
   { href: "/access", label: "Access", index: "05" },
 ];

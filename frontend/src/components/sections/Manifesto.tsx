@@ -44,6 +44,7 @@ export default function Manifesto() {
         className="mt-16 md:ml-[28%]"
       >
         <MediaFrame
+          src="/images/landing-visual.jpg"
           alt="DicomForge hero visual of a 3D mesh forged from CT slices"
           label="Asset 01 - Landing visual"
           note="1600 x 1000 - dark render, mesh emerging from slices"
