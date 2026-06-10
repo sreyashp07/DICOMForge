@@ -1,27 +1,25 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import Loader from "@/components/loader/Loader";
+import Hero from "@/components/sections/Hero";
+
+const FerrofluidCanvas = dynamic(
+  () => import("@/components/canvas/FerrofluidCanvas"),
+  { ssr: false }
+);
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
 
   return (
-    <main className="relative min-h-dvh overflow-hidden bg-ink text-peach">
-      <section
-        style={{ opacity: loading ? 0 : 1, transition: "opacity 0.9s ease 0.05s" }}
-        className="flex min-h-dvh flex-col items-center justify-center gap-5 px-6 text-center"
-      >
-        <h1
-          style={{ fontFamily: "var(--font-syne)" }}
-          className="text-4xl font-bold uppercase tracking-[0.4em] sm:text-6xl"
-        >
-          Dicom Forge
-        </h1>
-        <p className="max-w-md text-xs uppercase tracking-[0.2em] text-mint">
-          DICOM to 3D STL
-        </p>
-      </section>
+    <main className="relative min-h-dvh overflow-x-hidden bg-ink text-peach">
+      {!loading && <FerrofluidCanvas />}
+
+      <div style={{ opacity: loading ? 0 : 1, transition: "opacity 0.9s ease 0.05s" }}>
+        <Hero />
+      </div>
 
       <Loader onComplete={() => setLoading(false)} />
     </main>
