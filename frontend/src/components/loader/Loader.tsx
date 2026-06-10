@@ -13,9 +13,12 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
   const prefersReduced = useReducedMotion();
   const [mounted, setMounted] = useState(false);
   const [hidden, setHidden] = useState(false);
+
   const numRef = useRef<HTMLSpanElement>(null);
   const fillRef = useRef<HTMLDivElement>(null);
-  const controlsRef = useRef<ReturnType<typeof animate> | null>(null);
+  const wordFillRef = useRef<HTMLSpanElement>(null);
+  const strikeRef = useRef<HTMLSpanElement>(null);
+  const doneRef = useRef(false);
 
   useEffect(() => {
     setMounted(true);
@@ -24,11 +27,20 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
   useEffect(() => {
     if (!mounted) return;
     let active = true;
-    const fallback = setTimeout(() => {
-      if (!active) return;
+
+    const finish = async (fast = false) => {
+      if (doneRef.current) return;
+      doneRef.current = true;
       onComplete();
-      setHidden(true);
-    }, 6500);
+      if (scope.current) {
+        try {
+          await animate(scope.current, { opacity: 0 }, { duration: fast ? 0.25 : 0.6, ease: "easeInOut" });
+        } catch {}
+      }
+      if (active) setHidden(true);
+    };
+
+    const fallback = setTimeout(() => finish(true), 9000);
 
     const run = async () => {
       try {
@@ -36,36 +48,45 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
           await document.fonts.ready;
         }
       } catch {}
-      if (!active) return;
-
-      const overlay = scope.current;
-      if (!overlay) return;
+      if (!active || !scope.current) return;
 
       if (prefersReduced) {
-        onComplete();
-        await animate(overlay, { opacity: [1, 0] }, { duration: 0.4 });
-        if (active) setHidden(true);
+        await finish(true);
         return;
       }
 
-      animateValue(0, 100, {
-        duration: 3.2,
+      const intro: AnimationSequence = [
+        ["[data-d]", { x: [-110, 0], opacity: [0, 1] }, { duration: 0.6, ease: [0.22, 1, 0.36, 1] }],
+        ["[data-f]", { x: [110, 0], opacity: [0, 1] }, { duration: 0.6, ease: [0.22, 1, 0.36, 1], at: "-0.45" }],
+        ["[data-slash]", { strokeDashoffset: 0 }, { duration: 0.5, ease: "easeInOut", at: "-0.15" }],
+        ["[data-mono]", { opacity: 0, scale: 0.92 }, { duration: 0.4, ease: "easeIn", at: "+0.5" }],
+        ["[data-word]", { opacity: 1 }, { duration: 0.35, at: "-0.1" }],
+      ];
+
+      try {
+        await animate(intro);
+      } catch {}
+      if (!active) return;
+
+      const progress = animateValue(0, 100, {
+        duration: 2.1,
         ease: "easeInOut",
         onUpdate: (v) => {
           const n = Math.round(v);
           if (numRef.current) numRef.current.textContent = String(n).padStart(3, "0");
           if (fillRef.current) fillRef.current.style.transform = `scaleX(${v / 100})`;
+          if (wordFillRef.current) wordFillRef.current.style.clipPath = `inset(0 ${100 - v}% 0 0)`;
+          if (strikeRef.current) strikeRef.current.style.opacity = String(1 - (v / 100) * 0.85);
         },
       });
 
-      const intro: AnimationSequence = [
-        ["[data-d]", { opacity: 1, y: [14, 0] }, { duration: 0.5, ease: "easeOut" }],
-        ["[data-f]", { opacity: 1, y: [14, 0] }, { duration: 0.5, ease: "easeOut", at: "-0.34" }],
-        ["[data-slash]", { strokeDashoffset: 0 }, { duration: 0.55, ease: "easeInOut", at: "-0.2" }],
-        ["[data-df]", { opacity: 0, scale: 1.06 }, { duration: 0.4, ease: "easeIn", at: "+0.4" }],
-        ["[data-slash]", { opacity: 0 }, { duration: 0.25, at: "<" }],
-        ["[data-full]", { opacity: 1, letterSpacing: "0.5em" }, { duration: 0.75, ease: "easeOut", at: "<" }],
-        ["[data-full]", { opacity: 0, scale: 0.12 }, { duration: 0.45, ease: "easeIn", at: "+0.55" }],
+      try {
+        await progress;
+      } catch {}
+      if (!active) return;
+
+      const outro: AnimationSequence = [
+        ["[data-word]", { opacity: 0, scale: 0.1 }, { duration: 0.45, ease: "easeIn" }],
         ["[data-dot]", { opacity: 1, scale: 1 }, { duration: 0.3, ease: "easeOut", at: "<" }],
         ["[data-dot]", { scale: 1.5 }, { duration: 0.25, ease: "easeOut" }],
         ["[data-meter]", { opacity: 0 }, { duration: 0.4, at: "+0.05" }],
@@ -73,16 +94,10 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
         ["[data-dot]", { opacity: 0 }, { duration: 0.2, at: "<" }],
       ];
 
-      const controls = animate(intro);
-      controlsRef.current = controls;
       try {
-        await controls;
+        await animate(outro);
       } catch {}
-      if (!active) return;
-
-      onComplete();
-      await animate(overlay, { opacity: 0 }, { duration: 0.6, ease: "easeInOut" });
-      if (active) setHidden(true);
+      if (active) await finish();
     };
 
     run();
@@ -90,7 +105,6 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
     return () => {
       active = false;
       clearTimeout(fallback);
-      controlsRef.current?.stop();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mounted]);
@@ -113,62 +127,81 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
       }}
     >
       <div style={{ position: "relative", display: "grid", placeItems: "center" }} aria-hidden="true">
+        <svg
+          data-mono
+          width="min(64vw, 420px)"
+          viewBox="0 0 380 260"
+          style={{ gridArea: "1 / 1", overflow: "visible" }}
+        >
+          <g transform="translate(24 0) skewX(-12)">
+            <g data-d style={{ opacity: 0 }}>
+              <path
+                d="M40 30 L160 30 L198 72 L198 188 L160 230 L40 230 Z M92 78 L148 78 L156 88 L156 172 L148 182 L92 182 Z"
+                fill="var(--color-peach)"
+                fillRule="evenodd"
+              />
+            </g>
+            <g data-f style={{ opacity: 0 }}>
+              <path
+                d="M214 30 L348 30 L336 76 L266 76 L266 112 L330 112 L319 156 L266 156 L266 230 L214 230 Z"
+                fill="var(--color-peach)"
+              />
+            </g>
+          </g>
+          <line
+            data-slash
+            x1="6"
+            y1="206"
+            x2="374"
+            y2="54"
+            stroke="var(--color-mint)"
+            strokeWidth="3"
+            strokeLinecap="round"
+            style={{ strokeDasharray: 400, strokeDashoffset: 400 }}
+          />
+        </svg>
+
         <div
-          data-df
+          data-word
           style={{
             gridArea: "1 / 1",
             position: "relative",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "0.02em",
+            opacity: 0,
             fontFamily: "var(--font-syne)",
             fontWeight: 800,
-            fontSize: "clamp(56px, 12vw, 104px)",
-            letterSpacing: "0.04em",
-            color: "var(--color-peach)",
+            fontSize: "clamp(26px, 6vw, 52px)",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            whiteSpace: "nowrap",
             lineHeight: 1,
           }}
         >
-          <span data-d style={{ opacity: 0, display: "inline-block" }}>D</span>
-          <span data-f style={{ opacity: 0, display: "inline-block" }}>F</span>
-
-          <svg
-            width="240"
-            height="170"
-            viewBox="0 0 240 170"
-            aria-hidden="true"
-            style={{ position: "absolute", inset: 0, margin: "auto", pointerEvents: "none", overflow: "visible" }}
+          <span style={{ color: "rgba(243, 191, 163, 0.18)" }}>Dicomforge</span>
+          <span
+            ref={wordFillRef}
+            style={{
+              position: "absolute",
+              inset: 0,
+              color: "var(--color-peach)",
+              clipPath: "inset(0 100% 0 0)",
+            }}
           >
-            <line
-              data-slash
-              x1="24"
-              y1="136"
-              x2="216"
-              y2="34"
-              stroke="var(--color-peach)"
-              strokeWidth="2"
-              strokeLinecap="round"
-              style={{ strokeDasharray: 240, strokeDashoffset: 240 }}
-            />
-          </svg>
-        </div>
-
-        <div
-          data-full
-          style={{
-            gridArea: "1 / 1",
-            opacity: 0,
-            fontFamily: "var(--font-syne)",
-            fontWeight: 700,
-            fontSize: "clamp(20px, 4.5vw, 34px)",
-            letterSpacing: "0.15em",
-            textTransform: "uppercase",
-            color: "var(--color-peach)",
-            whiteSpace: "nowrap",
-          }}
-        >
-          Dicom Forge
+            Dicomforge
+          </span>
+          <span
+            ref={strikeRef}
+            style={{
+              position: "absolute",
+              left: "-4%",
+              right: "-4%",
+              top: "50%",
+              height: 3,
+              transform: "translateY(-50%) rotate(-4deg)",
+              backgroundColor: "var(--color-mint)",
+              borderRadius: 9999,
+              opacity: 1,
+            }}
+          />
         </div>
 
         <span
