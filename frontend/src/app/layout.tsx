@@ -1,9 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Syne, Space_Grotesk } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const clash = localFont({
+  src: "../fonts/ClashDisplay-Variable.woff2",
+  variable: "--font-clash",
+  display: "swap",
+});
+
+const syne = Syne({ variable: "--font-syne", subsets: ["latin"] });
+const spaceGrotesk = Space_Grotesk({ variable: "--font-space", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "DicomForge — DICOM to 3D STL",
@@ -15,7 +22,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${clash.variable} ${syne.variable} ${spaceGrotesk.variable}`}>
         {children}
       </body>
     </html>
