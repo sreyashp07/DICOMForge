@@ -17,7 +17,7 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
   const numRef = useRef<HTMLSpanElement>(null);
   const fillRef = useRef<HTMLDivElement>(null);
   const wordFillRef = useRef<HTMLSpanElement>(null);
-  const strikeRef = useRef<HTMLSpanElement>(null);
+  const strikeRef = useRef<SVGSVGElement>(null);
   const doneRef = useRef(false);
 
   useEffect(() => {
@@ -188,20 +188,39 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
           >
             Dicomforge
           </span>
-          <span
+          <svg
             ref={strikeRef}
+            aria-hidden="true"
+            viewBox="0 0 400 30"
+            preserveAspectRatio="none"
             style={{
               position: "absolute",
-              left: "-4%",
-              right: "-4%",
+              left: "-5%",
+              right: "-5%",
               top: "50%",
-              height: 3,
+              width: "110%",
+              height: 30,
               transform: "translateY(-50%) rotate(-4deg)",
-              backgroundColor: "var(--color-mint)",
-              borderRadius: 9999,
+              overflow: "visible",
               opacity: 1,
             }}
-          />
+          >
+            <path
+              d="M4 17 Q 20 8 36 15 T 68 14 T 100 17 T 132 13 T 164 16 T 196 14 T 228 17 T 260 13 T 292 16 T 324 14 T 356 17 T 392 14"
+              fill="none"
+              stroke="var(--color-mint)"
+              strokeWidth="4.5"
+              strokeLinecap="round"
+            />
+            <path
+              d="M6 19 Q 22 11 38 17 T 70 16 T 102 19 T 134 15 T 166 18 T 198 16 T 230 19 T 262 15 T 294 18 T 326 16 T 358 19 T 390 16"
+              fill="none"
+              stroke="var(--color-mint)"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              opacity="0.45"
+            />
+          </svg>
         </div>
 
         <span
