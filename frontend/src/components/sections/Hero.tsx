@@ -7,7 +7,7 @@ import { motion } from "motion/react";
 const BADGES = [
   { label: "Volumetric pipeline", detail: "40-slice DICOM intake", x: "6%", y: "24%", dur: 6.5 },
   { label: "Isosurface core", detail: "Marching cubes extraction", x: "70%", y: "18%", dur: 7.8 },
-  { label: "Zero-disk export", detail: "Binary STL streamed in-memory", x: "64%", y: "66%", dur: 7.1 },
+  { label: "Zero-disk export", detail: "Binary STL streamed in-memory", x: "64%", y: "62%", dur: 7.1 },
 ];
 
 export default function Hero() {
@@ -18,16 +18,22 @@ export default function Hero() {
     if (!titleRef.current) return;
     beamRef.current = gsap.fromTo(
       titleRef.current,
-      { backgroundPosition: "210% 50%" },
-      { backgroundPosition: "-110% 50%", duration: 7, ease: "none", repeat: -1 }
+      { backgroundPosition: "215% 50%" },
+      {
+        backgroundPosition: "-115% 50%",
+        duration: 4.6,
+        ease: "power2.inOut",
+        repeat: -1,
+        repeatDelay: 2.4,
+      }
     );
     return () => {
       beamRef.current?.kill();
     };
   }, []);
 
-  const speedUp = () => beamRef.current && gsap.to(beamRef.current, { timeScale: 3.2, duration: 0.4 });
-  const slowDown = () => beamRef.current && gsap.to(beamRef.current, { timeScale: 1, duration: 0.8 });
+  const speedUp = () => beamRef.current && gsap.to(beamRef.current, { timeScale: 2.4, duration: 0.5 });
+  const slowDown = () => beamRef.current && gsap.to(beamRef.current, { timeScale: 1, duration: 0.9 });
 
   return (
     <section className="relative z-10 flex min-h-dvh flex-col px-[clamp(20px,5vw,64px)]">
@@ -71,11 +77,12 @@ export default function Hero() {
           style={{
             fontFamily: "var(--font-clash)",
             backgroundImage:
-              "linear-gradient(105deg, rgba(243,191,163,0.30) 0%, rgba(243,191,163,0.30) 41%, #FFF3E9 50%, rgba(169,217,192,0.85) 53%, rgba(243,191,163,0.30) 62%, rgba(243,191,163,0.30) 100%)",
-            backgroundSize: "230% 100%",
+              "linear-gradient(105deg, #E8AE8C 0%, #E8AE8C 40%, #FFF6EE 50%, #BFE7D2 54%, #E8AE8C 64%, #E8AE8C 100%)",
+            backgroundSize: "240% 100%",
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
             color: "transparent",
+            textShadow: "0 0 70px rgba(243,191,163,0.18)",
           }}
           className="select-none text-[clamp(54px,12.5vw,176px)] font-semibold uppercase leading-[0.92] tracking-tight"
         >
