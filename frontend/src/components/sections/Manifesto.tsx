@@ -4,36 +4,71 @@ import { motion } from "motion/react";
 import MediaFrame from "@/components/ui/MediaFrame";
 import { usePageTransition } from "@/components/ui/PageTransition";
 
-const LINES = [
-  "DicomForge turns raw DICOM series",
-  "into surgical-grade 3D geometry.",
-  "No machine-learning black box.",
-  "Pure deterministic structure,",
-  "forged entirely in memory.",
-];
+function HoverWords({ text, className = "" }: { text: string; className?: string }) {
+  return (
+    <p className={className}>
+      {text.split(" ").map((word, i) => (
+        <span
+          key={i}
+          className="inline-block cursor-default transition-all duration-300 ease-out hover:-translate-y-[2px] hover:text-mint"
+        >
+          {word}
+          {"\u00A0"}
+        </span>
+      ))}
+    </p>
+  );
+}
+
+const PARA_1 =
+  "DicomForge is a precision instrument for medical imaging. It takes the flat grayscale slices of a CT or MRI series and forges them into a single accurate three-dimensional mesh that a clinician can rotate, section, measure and print.";
+
+const PARA_2 =
+  "There is no machine-learning guesswork inside. Every surface is reconstructed deterministically, with adaptive contrast enhancement and the marching cubes algorithm, entirely in memory. The same scan always produces the same trustworthy geometry, and nothing is ever written to disk.";
 
 export default function Manifesto() {
   const { navigate } = usePageTransition();
 
   return (
-    <section className="relative z-10 px-[clamp(20px,5vw,64px)] pb-[16vh] pt-[10vh]">
+    <section className="relative z-10 px-[clamp(20px,5vw,64px)] pb-[16vh] pt-[12vh]">
       <p className="mb-10 text-[10px] uppercase tracking-[0.5em] text-mint">What is DicomForge</p>
 
-      <div className="max-w-4xl">
-        {LINES.map((line, i) => (
-          <div key={line} className="overflow-hidden">
-            <motion.p
-              initial={{ y: "110%" }}
-              whileInView={{ y: "0%" }}
-              viewport={{ once: true, margin: "-12% 0px" }}
-              transition={{ duration: 0.8, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
-              style={{ fontFamily: "var(--font-clash)" }}
-              className="text-[clamp(26px,4.6vw,58px)] font-medium uppercase leading-[1.08] tracking-tight text-peach"
-            >
-              {line}
-            </motion.p>
-          </div>
-        ))}
+      <motion.h2
+        initial={{ opacity: 0, y: 28 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-12% 0px" }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        style={{ fontFamily: "var(--font-clash)" }}
+        className="max-w-3xl text-[clamp(30px,5vw,64px)] font-medium uppercase leading-[1.05] tracking-tight text-peach"
+      >
+        Slices in.
+        <br />
+        Structure out.
+      </motion.h2>
+
+      <div className="mt-14 grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-16">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-12% 0px" }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <HoverWords
+            text={PARA_1}
+            className="text-[clamp(15px,1.4vw,19px)] leading-[1.9] tracking-wide text-peach/70"
+          />
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-12% 0px" }}
+          transition={{ duration: 0.8, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <HoverWords
+            text={PARA_2}
+            className="text-[clamp(15px,1.4vw,19px)] leading-[1.9] tracking-wide text-peach/70"
+          />
+        </motion.div>
       </div>
 
       <motion.div
@@ -41,22 +76,20 @@ export default function Manifesto() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-10% 0px" }}
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        className="mt-16 md:ml-[28%]"
+        className="mt-20 md:ml-[28%]"
       >
         <MediaFrame
           src="/images/landing-visual.jpg"
           alt="DicomForge hero visual of a 3D mesh forged from CT slices"
           label="Asset 01 - Landing visual"
-          note="1600 x 1000 - dark render, mesh emerging from slices"
+          note="1600 x 1000"
           ratio="16 / 10"
+          className="border border-peach/15"
         />
       </motion.div>
 
       <div className="mt-16 flex justify-end">
-        <button
-          onClick={() => navigate("/technology")}
-          className="group flex items-baseline gap-4"
-        >
+        <button onClick={() => navigate("/technology")} className="group flex items-baseline gap-4">
           <span className="text-[10px] uppercase tracking-[0.4em] text-mint">Next</span>
           <span
             style={{ fontFamily: "var(--font-clash)" }}
