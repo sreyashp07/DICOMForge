@@ -5,6 +5,7 @@ import "./globals.css";
 import PageTransition from "@/components/ui/PageTransition";
 import Menu from "@/components/ui/Menu";
 import CustomCursor from "@/components/ui/CustomCursor";
+import DFLogo from "@/components/ui/DFLogo";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 
 const clash = localFont({
@@ -31,6 +32,7 @@ export default function RootLayout({
           <PageTransition>
             {children}
             <Menu />
+            <DFLogo />
           </PageTransition>
         </SmoothScroll>
         <CustomCursor />

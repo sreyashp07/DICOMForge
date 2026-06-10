@@ -5,9 +5,9 @@ import { gsap } from "gsap";
 import { motion } from "motion/react";
 
 const BADGES = [
-  { label: "Volumetric pipeline", detail: "40-slice DICOM intake", x: "6%", y: "22%", dur: 7.5, tilt: -2.5, delay: 1.0 },
-  { label: "Isosurface core", detail: "Marching cubes extraction", x: "70%", y: "16%", dur: 8.8, tilt: 2, delay: 1.25 },
-  { label: "Zero-disk export", detail: "Binary STL streamed in-memory", x: "63%", y: "60%", dur: 8.1, tilt: -1.5, delay: 1.5 },
+  { label: "Volumetric pipeline", detail: "40-slice DICOM intake", x: "6%", y: "15%", dur: 7.5, tilt: -2.5, delay: 1.0 },
+  { label: "Isosurface core", detail: "Marching cubes extraction", x: "26%", y: "24%", dur: 8.8, tilt: 2, delay: 1.25 },
+  { label: "Zero-disk export", detail: "Binary STL streamed in-memory", x: "11%", y: "38%", dur: 8.1, tilt: -1.5, delay: 1.5 },
 ];
 
 function Tick({ className }: { className: string }) {
@@ -41,11 +41,7 @@ export default function Hero() {
 
   return (
     <section className="relative z-10 flex min-h-dvh flex-col px-[clamp(20px,5vw,64px)]">
-      <header className="flex items-center justify-between pt-7 text-[11px] uppercase tracking-[0.35em] text-mint">
-        <span style={{ fontFamily: "var(--font-syne)" }} className="text-sm font-extrabold tracking-[0.2em] text-peach">
-          DF
-        </span>
-      </header>
+      <div className="pt-7" />
 
       <div className="relative flex flex-1 flex-col justify-end pb-[12vh]">
         {BADGES.map((b, i) => (
