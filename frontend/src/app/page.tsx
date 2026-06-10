@@ -4,6 +4,7 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import Loader from "@/components/loader/Loader";
 import Hero from "@/components/sections/Hero";
+import Manifesto from "@/components/sections/Manifesto";
 
 const FerrofluidCanvas = dynamic(
   () => import("@/components/canvas/FerrofluidCanvas"),
@@ -19,6 +20,7 @@ export default function Home() {
 
       <div style={{ opacity: loading ? 0 : 1, transition: "opacity 0.9s ease 0.05s" }}>
         <Hero />
+        <Manifesto />
       </div>
 
       <Loader onComplete={() => setLoading(false)} />
