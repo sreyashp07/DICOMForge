@@ -5,10 +5,14 @@ import { gsap } from "gsap";
 import { motion } from "motion/react";
 
 const BADGES = [
-  { label: "Volumetric pipeline", detail: "40-slice DICOM intake", x: "6%", y: "24%", dur: 6.5 },
-  { label: "Isosurface core", detail: "Marching cubes extraction", x: "70%", y: "18%", dur: 7.8 },
-  { label: "Zero-disk export", detail: "Binary STL streamed in-memory", x: "64%", y: "62%", dur: 7.1 },
+  { label: "Volumetric pipeline", detail: "40-slice DICOM intake", x: "6%", y: "22%", dur: 7.5, tilt: -2.5, delay: 1.0 },
+  { label: "Isosurface core", detail: "Marching cubes extraction", x: "70%", y: "16%", dur: 8.8, tilt: 2, delay: 1.25 },
+  { label: "Zero-disk export", detail: "Binary STL streamed in-memory", x: "63%", y: "60%", dur: 8.1, tilt: -1.5, delay: 1.5 },
 ];
+
+function Tick({ className }: { className: string }) {
+  return <span aria-hidden="true" className={`absolute h-2 w-2 border-mint/70 ${className}`} />;
+}
 
 export default function Hero() {
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -44,17 +48,45 @@ export default function Hero() {
       </header>
 
       <div className="relative flex flex-1 flex-col justify-end pb-[12vh]">
-        {BADGES.map((b) => (
+        {BADGES.map((b, i) => (
           <motion.div
             key={b.label}
             aria-hidden="true"
-            className="pointer-events-none absolute hidden border border-peach/15 bg-surface/60 px-4 py-3 backdrop-blur-sm md:block"
+            className="pointer-events-none absolute hidden md:block"
             style={{ left: b.x, top: b.y }}
-            animate={{ y: [0, -12, 0, 10, 0] }}
-            transition={{ duration: b.dur, repeat: Infinity, ease: "easeInOut" }}
+            initial={{ opacity: 0, y: 26 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: b.delay, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           >
-            <p className="text-[10px] uppercase tracking-[0.3em] text-mint">{b.label}</p>
-            <p className="mt-1 text-xs tracking-wide text-peach/80">{b.detail}</p>
+            <motion.div
+              animate={{
+                y: [0, -14, 0, 11, 0],
+                x: [0, 6, 0, -5, 0],
+                rotate: [b.tilt, -b.tilt, b.tilt],
+              }}
+              transition={{ duration: b.dur, repeat: Infinity, ease: "easeInOut" }}
+              className="relative border border-peach/15 bg-surface/55 px-5 py-4 backdrop-blur-md"
+            >
+              <Tick className="left-0 top-0 border-l border-t" />
+              <Tick className="right-0 top-0 border-r border-t" />
+              <Tick className="bottom-0 left-0 border-b border-l" />
+              <Tick className="bottom-0 right-0 border-b border-r" />
+
+              <div className="flex items-center gap-2.5">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint opacity-60" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-mint" />
+                </span>
+                <p className="text-[10px] uppercase tracking-[0.3em] text-mint">{b.label}</p>
+              </div>
+              <p className="mt-2 text-xs tracking-wide text-peach/85">{b.detail}</p>
+              <span
+                aria-hidden="true"
+                className="mt-3 block h-px w-full"
+                style={{ background: "linear-gradient(90deg, var(--color-mint), transparent 70%)" }}
+              />
+              <p className="mt-1.5 text-[9px] tracking-[0.4em] text-peach/30">DF-{String(i + 1).padStart(2, "0")}</p>
+            </motion.div>
           </motion.div>
         ))}
 
