@@ -5,9 +5,9 @@ import { gsap } from "gsap";
 import { motion } from "motion/react";
 
 const BADGES = [
-  { label: "Volumetric pipeline", detail: "40-slice DICOM intake", x: "6%", y: "15%", dur: 7.5, tilt: -2.5, delay: 1.0 },
-  { label: "Isosurface core", detail: "Marching cubes extraction", x: "26%", y: "24%", dur: 8.8, tilt: 2, delay: 1.25 },
-  { label: "Zero-disk export", detail: "Binary STL streamed in-memory", x: "11%", y: "38%", dur: 8.1, tilt: -1.5, delay: 1.5 },
+  { label: "Volumetric pipeline", detail: "40-slice DICOM intake", x: "60%", y: "13%", dur: 7.5, tilt: -2.5, delay: 1.0 },
+  { label: "Isosurface core", detail: "Marching cubes extraction", x: "76%", y: "34%", dur: 8.8, tilt: 2, delay: 1.25 },
+  { label: "Zero-disk export", detail: "Binary STL streamed in-memory", x: "62%", y: "56%", dur: 8.1, tilt: -1.5, delay: 1.5 },
 ];
 
 function Tick({ className }: { className: string }) {
