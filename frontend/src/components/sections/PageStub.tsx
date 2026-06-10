@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import ScrambleText from "@/components/ui/ScrambleText";
 
 export default function PageStub({
   index,
@@ -12,29 +13,38 @@ export default function PageStub({
   blurb: string;
 }) {
   return (
-    <main className="relative flex min-h-dvh flex-col justify-end overflow-hidden bg-ink px-[clamp(20px,5vw,64px)] pb-[12vh] text-peach">
-      <motion.p
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="mb-4 text-[11px] uppercase tracking-[0.35em] text-mint"
-      >
-        Forge / {index}
-      </motion.p>
-      <motion.h1
-        initial={{ opacity: 0, y: 36 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.9, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        style={{ fontFamily: "var(--font-clash)" }}
-        className="text-[clamp(44px,9vw,128px)] font-semibold uppercase leading-[0.95] tracking-tight"
-      >
-        {title}
-      </motion.h1>
+    <main className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden bg-ink px-6 text-center text-peach">
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.15, duration: 0.7 }}
-        className="mt-5 max-w-md text-xs uppercase leading-relaxed tracking-[0.25em] text-peach/50"
+        transition={{ delay: 0.85, duration: 0.6 }}
+        className="mb-6 text-[10px] uppercase tracking-[0.5em] text-mint"
+      >
+        {index}
+      </motion.p>
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.95, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <h1
+          style={{ fontFamily: "var(--font-space)" }}
+          className="text-[clamp(34px,6vw,84px)] font-light uppercase tracking-[0.3em]"
+        >
+          <ScrambleText text={title} autoStart delay={1.1} />
+        </h1>
+      </motion.div>
+      <motion.span
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ delay: 1.3, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className="my-8 h-px w-24 origin-center bg-mint/40"
+      />
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.45, duration: 0.7 }}
+        className="max-w-sm text-[11px] uppercase leading-loose tracking-[0.3em] text-peach/45"
       >
         {blurb}
       </motion.p>

@@ -16,6 +16,7 @@ export default function CustomCursor() {
     let ry = y;
     let scale = 1;
     let targetScale = 1;
+    let angle = 0;
     let raf = 0;
 
     const onMove = (e: PointerEvent) => {
@@ -30,7 +31,7 @@ export default function CustomCursor() {
       t instanceof Element && !!t.closest("a, button, [data-cursor]");
 
     const onOver = (e: Event) => {
-      if (isInteractive(e.target)) targetScale = 2.4;
+      if (isInteractive(e.target)) targetScale = 2.2;
     };
     const onOut = (e: Event) => {
       if (isInteractive(e.target)) targetScale = 1;
@@ -40,8 +41,9 @@ export default function CustomCursor() {
       rx += (x - rx) * 0.16;
       ry += (y - ry) * 0.16;
       scale += (targetScale - scale) * 0.14;
+      angle = (angle + 1.1) % 360;
       if (ringRef.current) {
-        ringRef.current.style.transform = `translate3d(${rx}px, ${ry}px, 0) translate(-50%, -50%) scale(${scale})`;
+        ringRef.current.style.transform = `translate3d(${rx}px, ${ry}px, 0) translate(-50%, -50%) scale(${scale}) rotate(${angle}deg)`;
       }
       raf = requestAnimationFrame(loop);
     };
@@ -69,12 +71,13 @@ export default function CustomCursor() {
           position: "fixed",
           top: 0,
           left: 0,
-          width: 6,
-          height: 6,
+          width: 7,
+          height: 7,
           borderRadius: 9999,
           backgroundColor: "var(--color-peach)",
           pointerEvents: "none",
           zIndex: 10000,
+          mixBlendMode: "difference",
         }}
       />
       <div
@@ -84,12 +87,17 @@ export default function CustomCursor() {
           position: "fixed",
           top: 0,
           left: 0,
-          width: 34,
-          height: 34,
+          width: 36,
+          height: 36,
           borderRadius: 9999,
-          border: "1px solid rgba(169, 217, 192, 0.55)",
+          background:
+            "conic-gradient(from 0deg, var(--color-peach), var(--color-mint), var(--color-peach))",
+          WebkitMask:
+            "radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px))",
+          mask: "radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px))",
           pointerEvents: "none",
           zIndex: 10000,
+          mixBlendMode: "difference",
         }}
       />
     </>
