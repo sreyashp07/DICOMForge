@@ -7,6 +7,7 @@ import Menu from "@/components/ui/Menu";
 import CustomCursor from "@/components/ui/CustomCursor";
 import DFLogo from "@/components/ui/DFLogo";
 import AccessIcon from "@/components/ui/AccessIcon";
+import ChatGuide from "@/components/guide/ChatGuide";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import AuthProvider from "@/context/AuthContext";
 
@@ -37,6 +38,7 @@ export default function RootLayout({
             <Menu />
             <DFLogo />
             <AccessIcon />
+            <ChatGuide />
           </PageTransition>
         </SmoothScroll>
         </AuthProvider>
