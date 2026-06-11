@@ -34,7 +34,11 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
       onComplete();
       if (scope.current) {
         try {
-          await animate(scope.current, { opacity: 0 }, { duration: fast ? 0.25 : 0.95, ease: "easeInOut" });
+          await animate(
+            scope.current,
+            { opacity: 0 },
+            { duration: fast ? 0.25 : 1.05, ease: [0.4, 0, 0.2, 1] }
+          );
         } catch {}
       }
       if (active) setHidden(true);
@@ -86,12 +90,11 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
       if (!active) return;
 
       const outro: AnimationSequence = [
-        ["[data-word]", { opacity: 0, scale: 0.1 }, { duration: 0.45, ease: "easeIn" }],
+        ["[data-word]", { opacity: 0, scale: 0.32 }, { duration: 0.5, ease: [0.45, 0, 0.55, 1] }],
         ["[data-dot]", { opacity: 1, scale: 1 }, { duration: 0.3, ease: "easeOut", at: "<" }],
-        ["[data-dot]", { scale: 1.5 }, { duration: 0.25, ease: "easeOut" }],
-        ["[data-meter]", { opacity: 0 }, { duration: 0.4, at: "+0.05" }],
-        ["[data-bloom]", { opacity: [0, 0.9], scale: 46 }, { duration: 1.1, ease: [0.45, 0, 0.2, 1], at: "<" }],
-        ["[data-dot]", { opacity: 0 }, { duration: 0.2, at: "<" }],
+        ["[data-meter]", { opacity: 0 }, { duration: 0.5, at: "-0.1" }],
+        ["[data-bloom]", { opacity: [0, 0.85], scale: 40 }, { duration: 1.25, ease: [0.4, 0, 0.3, 1], at: "<" }],
+        ["[data-dot]", { opacity: 0 }, { duration: 0.3, at: "-0.9" }],
       ];
 
       try {
@@ -196,7 +199,6 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
             style={{
               position: "absolute",
               left: "-5%",
-              right: "-5%",
               top: "50%",
               width: "110%",
               height: 30,
@@ -294,7 +296,7 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
           transform: "scale(0)",
           pointerEvents: "none",
           background:
-            "radial-gradient(circle, rgba(252,230,214,0.92) 0%, rgba(243,191,163,0.85) 32%, rgba(169,217,192,0.7) 64%, rgba(111,184,154,0) 100%)",
+            "radial-gradient(circle, rgba(252,230,214,0.55) 0%, rgba(243,191,163,0.5) 30%, rgba(169,217,192,0.38) 62%, rgba(111,184,154,0) 100%)",
         }}
       />
     </div>
