@@ -5,7 +5,13 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 
-function HoloMesh({ geometry, paused }: { geometry: THREE.BufferGeometry; paused: boolean }) {
+function HoloMesh({
+  geometry,
+  paused,
+}: {
+  geometry: THREE.BufferGeometry;
+  paused: boolean;
+}) {
   const group = useRef<THREE.Group>(null);
 
   const scale = useMemo(() => {
@@ -58,7 +64,6 @@ export default function HoloViewer({
 }: {
   geometry: THREE.BufferGeometry | null;
   paused: boolean;
-}) {| null;
 }) {
   return (
     <div className="absolute inset-0">
