@@ -19,6 +19,8 @@ const HoloViewer = dynamic(() => import("@/components/dashboard/HoloViewer"), {
 
 const DEMOS = [
   { id: "shell", name: "Calibration Shell", file: "/models/demo-shell.stl" },
+  { id: "cranial-a", name: "Cranial Study A", file: "/models/demo-cranial-a.stl" },
+  { id: "cranial-b", name: "Cranial Study B", file: "/models/demo-cranial-b.stl" },
 ];
 
 type Meta = { name: string; tris: number; sizeMB: string; source: string };
