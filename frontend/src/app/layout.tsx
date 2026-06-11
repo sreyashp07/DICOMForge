@@ -7,6 +7,7 @@ import Menu from "@/components/ui/Menu";
 import CustomCursor from "@/components/ui/CustomCursor";
 import DFLogo from "@/components/ui/DFLogo";
 import SmoothScroll from "@/components/ui/SmoothScroll";
+import AuthProvider from "@/context/AuthContext";
 
 const clash = localFont({
   src: "../fonts/ClashDisplay-Variable.woff2",
@@ -28,6 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${clash.variable} ${syne.variable} ${spaceGrotesk.variable}`}>
+        <AuthProvider>
         <SmoothScroll>
           <PageTransition>
             {children}
@@ -35,6 +37,7 @@ export default function RootLayout({
             <DFLogo />
           </PageTransition>
         </SmoothScroll>
+        </AuthProvider>
         <CustomCursor />
       </body>
     </html>
