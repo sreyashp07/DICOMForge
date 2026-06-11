@@ -3,6 +3,7 @@ from flask_cors import CORS
 
 import config
 from routes.auth import auth_bp
+from routes.chat import chat_bp
 from routes.forge import forge_bp
 
 app = Flask(__name__)
@@ -16,6 +17,7 @@ CORS(
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(forge_bp)
+app.register_blueprint(chat_bp)
 
 
 @app.errorhandler(413)
