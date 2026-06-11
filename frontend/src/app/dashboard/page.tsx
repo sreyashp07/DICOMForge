@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import axios from "axios";
 import * as THREE from "three";
@@ -21,9 +21,21 @@ const DEMOS = [
   { id: "shell", name: "Calibration Shell", file: "/models/demo-shell.stl" },
   { id: "cranial-a", name: "Cranial Study A", file: "/models/demo-cranial-a.stl" },
   { id: "cranial-b", name: "Cranial Study B", file: "/models/demo-cranial-b.stl" },
+  { id: "thoracic", name: "Thoracic Cage", file: "/models/demo-thoracic.stl" },
+  { id: "pelvic", name: "Pelvic Frame", file: "/models/demo-pelvic.stl" },
+  { id: "femur", name: "Femur Segment", file: "/models/demo-femur.stl" },
+  { id: "vertebral", name: "Vertebral Stack", file: "/models/demo-vertebral.stl" },
+  { id: "mandible", name: "Mandible Arc", file: "/models/demo-mandible.stl" },
+  { id: "scapula", name: "Scapula Wing", file: "/models/demo-scapula.stl" },
 ];
 
-type Meta = { name: string; tris: number; sizeMB: string; source: string };
+type Meta = {
+  name: string;
+  tris: number;
+  sizeMB: string;
+  source: string;
+  forgedAt: string;
+};
 
 function Panel({
   children,
@@ -63,7 +75,37 @@ function ForgeFloor() {
   const [uploadPct, setUploadPct] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [blob, setBlob] = useState<Blob | null>(null);
+  const [paused, setPaused] = useState(false);
+  const [clock, setClock] = useState("");
+  const [forgeCount, setForgeCount] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setForgeCount(Number(localStorage.getItem("df_forge_count") || 0));
+    const tick = () =>
+      setClock(
+        new Date().toLocaleString(undefined, {
+          weekday: "short",
+          day: "2-digit",
+          month: "short",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        })
+      );
+    tick();
+    const t = setInterval(tick, 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  const stamp = () =>
+    new Date().toLocaleString(undefined, {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
   const loadDemo = async (demo: (typeof DEMOS)[number]) => {
     if (phase) return;
@@ -80,6 +122,7 @@ function ForgeFloor() {
         tris: triangleCount(geo),
         sizeMB: (buf.byteLength / 1024 / 1024).toFixed(2),
         source: "Archive demo",
+        forgedAt: stamp(),
       });
     } catch {
       setError("That demo model is not installed yet");
@@ -124,7 +167,12 @@ function ForgeFloor() {
         tris: Number(res.headers["x-triangle-count"]) || triangleCount(geo),
         sizeMB: (res.data.byteLength / 1024 / 1024).toFixed(2),
         source: `${files.length} slices forged`,
+        forgedAt: stamp(),
       });
+      const next = forgeCount + 1;
+      setForgeCount(next);
+      localStorage.setItem("df_forge_count", String(next));
+      localStorage.setItem("df_last_forge", stamp());
     } catch (err) {
       let msg = "The forge failed on this series";
       if (axios.isAxiosError(err) && err.response?.data) {
@@ -153,8 +201,29 @@ function ForgeFloor() {
 
   return (
     <main className="relative h-dvh overflow-hidden bg-ink text-peach">
-      <HoloViewer geometry={geometry} />
+      <HoloViewer geometry={geometry} paused={paused} />
       <ProcessingOverlay phase={phase} uploadPct={uploadPct} />
+
+      <motion.div
+        initial={{ opacity: 0, y: -16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute left-1/2 top-7 z-30 flex -translate-x-1/2 flex-col items-center gap-1.5 text-center"
+      >
+        <p
+          style={{ fontFamily: "var(--font-clash)" }}
+          className="text-xl font-semibold uppercase tracking-tight"
+        >
+          <ScrambleText text={`Hey, ${user?.name ?? "Operator"}`} autoStart delay={1.0} framesPerChar={6} />
+        </p>
+        <p className="text-[9px] uppercase tracking-[0.35em] text-mint">{clock}</p>
+        <p className="text-[9px] uppercase tracking-[0.3em] text-peach/40">
+          Forges: {forgeCount}
+          {typeof window !== "undefined" && localStorage.getItem("df_last_forge")
+            ? ` - Last: ${localStorage.getItem("df_last_forge")}`
+            : ""}
+        </p>
+      </motion.div>
 
       {!geometry && !phase && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
@@ -167,7 +236,7 @@ function ForgeFloor() {
         </div>
       )}
 
-      <Panel className="absolute left-[clamp(16px,4vw,56px)] top-24 z-30 w-64" delay={0.9}>
+      <Panel className="absolute left-[clamp(16px,4vw,56px)] top-28 z-30 w-64" delay={0.9}>
         <p className="text-[9px] uppercase tracking-[0.4em] text-mint">Specimen</p>
         {meta ? (
           <div className="mt-3 flex flex-col gap-2">
@@ -179,10 +248,17 @@ function ForgeFloor() {
             </p>
             <p className="text-[10px] uppercase tracking-[0.25em] text-peach/60">{meta.sizeMB} MB binary STL</p>
             <p className="text-[10px] uppercase tracking-[0.25em] text-mint/70">{meta.source}</p>
+            <p className="text-[10px] uppercase tracking-[0.25em] text-peach/45">{meta.forgedAt}</p>
+            <button
+              onClick={() => setPaused((p) => !p)}
+              className="mt-2 border border-peach/25 py-2 text-[9px] uppercase tracking-[0.35em] transition-colors duration-300 hover:border-mint hover:text-mint"
+            >
+              {paused ? "Resume rotation" : "Pause rotation"}
+            </button>
             {blob && (
               <button
                 onClick={download}
-                className="mt-2 border border-peach/25 py-2 text-[9px] uppercase tracking-[0.35em] transition-colors duration-300 hover:border-mint hover:text-mint"
+                className="border border-peach/25 py-2 text-[9px] uppercase tracking-[0.35em] transition-colors duration-300 hover:border-mint hover:text-mint"
               >
                 Download STL
               </button>
@@ -195,7 +271,7 @@ function ForgeFloor() {
         )}
       </Panel>
 
-      <Panel className="absolute right-[clamp(16px,4vw,56px)] top-24 z-30 w-64" delay={1.1} dur={8}>
+      <Panel className="absolute right-[clamp(16px,4vw,56px)] top-28 z-30 w-64" delay={1.1} dur={8}>
         <p className="text-[9px] uppercase tracking-[0.4em] text-mint">Forge intake</p>
         <button
           onClick={() => inputRef.current?.click()}
@@ -215,7 +291,7 @@ function ForgeFloor() {
         />
 
         <p className="mt-5 text-[9px] uppercase tracking-[0.4em] text-mint">Archive</p>
-        <div className="mt-2 flex flex-col gap-1.5">
+        <div className="mt-2 flex max-h-[34vh] flex-col gap-1.5 overflow-y-auto pr-1">
           {DEMOS.map((d) => (
             <button
               key={d.id}
@@ -235,15 +311,13 @@ function ForgeFloor() {
             <ScrambleText key={error} text={error} autoStart framesPerChar={4} />
           </p>
         )}
-        <p className="text-[9px] uppercase tracking-[0.4em] text-peach/30">
-          Forge floor - {user?.name}
-        </p>
+        <p className="text-[9px] uppercase tracking-[0.4em] text-peach/30">Forge floor</p>
       </div>
 
       <button
         onClick={() => {
           logout();
-          navigate("/");
+          navigate("/access");
         }}
         className="absolute bottom-7 right-[clamp(16px,4vw,56px)] z-30 text-[9px] uppercase tracking-[0.4em] text-peach/40 transition-colors duration-300 hover:text-mint"
       >

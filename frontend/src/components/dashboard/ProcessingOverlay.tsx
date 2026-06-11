@@ -54,34 +54,42 @@ export default function ProcessingOverlay({
             WebkitBackdropFilter: "blur(8px)",
           }}
         >
-          <div className="relative flex h-[170px] w-[200px] flex-col-reverse items-center justify-start gap-[5px]">
-            {Array.from({ length: BARS }).map((_, i) => (
-              <motion.span
-                key={i}
-                className="block h-[3px] rounded-full"
-                style={{ backgroundColor: "var(--color-peach)" }}
-                animate={{
-                  width: ["28%", "92%", "28%"],
-                  opacity: [0.15, 0.95, 0.15],
-                }}
-                transition={{
-                  duration: 2.6,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: i * 0.12,
-                }}
-              />
-            ))}
+          <div className="relative flex h-[180px] w-[210px] flex-col-reverse items-center justify-start gap-[5px]">
+            {Array.from({ length: BARS }).map((_, i) => {
+              const profile =
+                30 + 62 * Math.sin((Math.PI * i) / (BARS - 1));
+              return (
+                <motion.span
+                  key={`${phase}-${i}`}
+                  className="block h-[4px] rounded-full"
+                  style={{ backgroundColor: "var(--color-peach)" }}
+                  initial={{ width: "0%", opacity: 0 }}
+                  animate={{
+                    width: `${profile}%`,
+                    opacity: [0, 0.95, 0.6, 0.95],
+                  }}
+                  transition={{
+                    width: { delay: i * 0.22, duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+                    opacity: {
+                      delay: i * 0.22,
+                      duration: 3.2,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    },
+                  }}
+                />
+              );
+            })}
             <motion.span
               aria-hidden="true"
-              className="absolute left-[-12%] h-[1.5px] w-[124%]"
+              className="absolute left-[-10%] h-[1.5px] w-[120%]"
               style={{
                 background:
                   "linear-gradient(90deg, transparent, var(--color-mint), transparent)",
                 boxShadow: "0 0 18px rgba(169,217,192,0.5)",
               }}
-              animate={{ top: ["100%", "-4%"] }}
-              transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+              animate={{ top: ["102%", "-4%"] }}
+              transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
             />
           </div>
 

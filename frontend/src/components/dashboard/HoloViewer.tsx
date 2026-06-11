@@ -5,7 +5,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 
-function HoloMesh({ geometry }: { geometry: THREE.BufferGeometry }) {
+function HoloMesh({ geometry, paused }: { geometry: THREE.BufferGeometry; paused: boolean }) {
   const group = useRef<THREE.Group>(null);
 
   const scale = useMemo(() => {
@@ -14,7 +14,7 @@ function HoloMesh({ geometry }: { geometry: THREE.BufferGeometry }) {
   }, [geometry]);
 
   useFrame((_, delta) => {
-    if (group.current) group.current.rotation.y += delta * 0.22;
+    if (group.current && !paused) group.current.rotation.y += delta * 0.07;
   });
 
   return (
@@ -54,8 +54,11 @@ function ScanRing() {
 
 export default function HoloViewer({
   geometry,
+  paused,
 }: {
   geometry: THREE.BufferGeometry | null;
+  paused: boolean;
+}) {| null;
 }) {
   return (
     <div className="absolute inset-0">
@@ -77,7 +80,7 @@ export default function HoloViewer({
 
         {geometry && (
           <>
-            <HoloMesh geometry={geometry} />
+            <HoloMesh geometry={geometry} paused={paused} />
             <ScanRing />
           </>
         )}
