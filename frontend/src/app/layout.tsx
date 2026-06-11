@@ -5,13 +5,11 @@ import "./globals.css";
 import PageTransition from "@/components/ui/PageTransition";
 import Menu from "@/components/ui/Menu";
 import CustomCursor from "@/components/ui/CustomCursor";
+import SmoothScroll from "@/components/ui/SmoothScroll";
+import AuthProvider from "@/context/AuthContext";
 import DFLogo from "@/components/ui/DFLogo";
 import AccessIcon from "@/components/ui/AccessIcon";
 import ChatGuide from "@/components/guide/ChatGuide";
-import ChatGuide from "@/components/guide/ChatGuide";
-import ChatGuide from "@/components/guide/ChatGuide";
-import SmoothScroll from "@/components/ui/SmoothScroll";
-import AuthProvider from "@/context/AuthContext";
 
 const clash = localFont({
   src: "../fonts/ClashDisplay-Variable.woff2",
@@ -34,17 +32,15 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${clash.variable} ${syne.variable} ${spaceGrotesk.variable}`}>
         <AuthProvider>
-        <SmoothScroll>
-          <PageTransition>
-            {children}
-            <Menu />
-            <DFLogo />
-            <AccessIcon />
-            <ChatGuide />
-            <ChatGuide />
-            <ChatGuide />
-          </PageTransition>
-        </SmoothScroll>
+          <SmoothScroll>
+            <PageTransition>
+              {children}
+              <Menu />
+              <DFLogo />
+              <AccessIcon />
+              <ChatGuide />
+            </PageTransition>
+          </SmoothScroll>
         </AuthProvider>
         <CustomCursor />
       </body>
