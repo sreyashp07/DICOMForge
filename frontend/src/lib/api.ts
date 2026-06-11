@@ -11,3 +11,19 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
+api.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    if (
+      typeof window !== "undefined" &&
+      err?.response?.status === 401 &&
+      !String(err?.config?.url || "").includes("/api/auth/login") &&
+      !String(err?.config?.url || "").includes("/api/auth/register")
+    ) {
+      localStorage.removeItem("df_token");
+      window.location.href = "/access";
+    }
+    return Promise.reject(err);
+  }
+);
