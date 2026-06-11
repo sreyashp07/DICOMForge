@@ -291,7 +291,7 @@ function ForgeFloor() {
         />
 
         <p className="mt-5 text-[9px] uppercase tracking-[0.4em] text-mint">Archive</p>
-        <div className="mt-2 flex max-h-[34vh] flex-col gap-1.5 overflow-y-auto pr-1">
+        <div data-lenis-prevent className="mt-2 flex max-h-[34vh] flex-col gap-1.5 overflow-y-auto pr-1">
           {DEMOS.map((d, i) => (
             <button
               key={d.id}
