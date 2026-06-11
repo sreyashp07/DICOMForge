@@ -26,6 +26,9 @@ const PARA_1 =
 const PARA_2 =
   "There is no machine-learning guesswork inside. Every surface is reconstructed deterministically, with adaptive contrast enhancement and the marching cubes algorithm, entirely in memory. The same scan always produces the same trustworthy geometry, and nothing is ever written to disk.";
 
+const PARA_3 =
+  "The result is structure a person can hold. A fracture stops being thirty separate frames and becomes one object, turned in the hand of the surgeon who has to repair it. Depth, scale and relation, restored to imaging that always had them but could never show them.";
+
 export default function Manifesto() {
   const { navigate } = usePageTransition();
 
@@ -71,22 +74,35 @@ export default function Manifesto() {
         </motion.div>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-10% 0px" }}
-        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        className="mt-20 md:ml-[28%]"
-      >
-        <MediaFrame
-          src="/images/landing-visual.jpg"
-          alt="DicomForge hero visual of a 3D mesh forged from CT slices"
-          label="Asset 01 - Landing visual"
-          note="1600 x 1000"
-          ratio="16 / 10"
-          className="border border-peach/15"
-        />
-      </motion.div>
+      <div className="mt-20 grid grid-cols-1 items-center gap-10 md:grid-cols-[0.9fr_1.1fr] md:gap-16">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-12% 0px" }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <p className="mb-6 text-[10px] uppercase tracking-[0.5em] text-mint">Why it matters</p>
+          <HoverWords
+            text={PARA_3}
+            className="text-[clamp(15px,1.4vw,19px)] leading-[1.9] tracking-wide text-peach/70"
+          />
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-10% 0px" }}
+          transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <MediaFrame
+            src="/images/landing-visual.jpg"
+            alt="DicomForge hero visual of a 3D mesh forged from CT slices"
+            label="Asset 01 - Landing visual"
+            note="1600 x 1000"
+            ratio="16 / 10"
+            className="border border-peach/15"
+          />
+        </motion.div>
+      </div>
 
       <div className="mt-16 flex justify-end">
         <button onClick={() => navigate("/technology")} className="group flex items-baseline gap-4">
