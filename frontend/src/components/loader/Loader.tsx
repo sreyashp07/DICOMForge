@@ -34,7 +34,7 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
       onComplete();
       if (scope.current) {
         try {
-          await animate(scope.current, { opacity: 0 }, { duration: fast ? 0.25 : 0.6, ease: "easeInOut" });
+          await animate(scope.current, { opacity: 0 }, { duration: fast ? 0.25 : 0.95, ease: "easeInOut" });
         } catch {}
       }
       if (active) setHidden(true);
@@ -90,7 +90,7 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
         ["[data-dot]", { opacity: 1, scale: 1 }, { duration: 0.3, ease: "easeOut", at: "<" }],
         ["[data-dot]", { scale: 1.5 }, { duration: 0.25, ease: "easeOut" }],
         ["[data-meter]", { opacity: 0 }, { duration: 0.4, at: "+0.05" }],
-        ["[data-bloom]", { opacity: 1, scale: 64 }, { duration: 0.85, ease: "easeIn", at: "<" }],
+        ["[data-bloom]", { opacity: [0, 0.9], scale: 46 }, { duration: 1.1, ease: [0.45, 0, 0.2, 1], at: "<" }],
         ["[data-dot]", { opacity: 0 }, { duration: 0.2, at: "<" }],
       ];
 
@@ -294,7 +294,7 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
           transform: "scale(0)",
           pointerEvents: "none",
           background:
-            "radial-gradient(circle, #FFF3E9 0%, var(--color-peach-bloom) 20%, var(--color-peach) 44%, var(--color-mint) 72%, var(--color-mint-deep) 100%)",
+            "radial-gradient(circle, rgba(252,230,214,0.92) 0%, rgba(243,191,163,0.85) 32%, rgba(169,217,192,0.7) 64%, rgba(111,184,154,0) 100%)",
         }}
       />
     </div>
