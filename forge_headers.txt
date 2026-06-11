@@ -1,0 +1,16 @@
+HTTP/1.1 100 Continue
+
+HTTP/1.1 100 Continue
+
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.8 Python/3.11.9
+Date: Thu, 11 Jun 2026 04:03:35 GMT
+Content-Disposition: attachment; filename=dicomforge.stl
+Content-Type: model/stl
+Content-Length: 17393884
+Cache-Control: no-cache
+X-Triangle-Count: 347876
+Access-Control-Expose-Headers: X-Triangle-Count
+Access-Control-Allow-Origin: http://localhost:3000
+Connection: close
+

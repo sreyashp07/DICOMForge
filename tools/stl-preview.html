@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>DicomForge STL Preview</title>
+<style>
+  body { margin: 0; background: #0B0C0E; color: #F3BFA3; font-family: monospace; overflow: hidden; }
+  #ui { position: fixed; top: 16px; left: 16px; z-index: 10; }
+  #stats { position: fixed; bottom: 16px; left: 16px; color: #A9D9C0; font-size: 12px; letter-spacing: 2px; }
+  input { color: #F3BFA3; }
+</style>
+</head>
+<body>
+<div id="ui"><input type="file" id="file" accept=".stl" /></div>
+<div id="stats">Select forged.stl above, drag to orbit, wheel to zoom</div>
+<script type="importmap">
+{ "imports": {
+  "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { STLLoader } from "three/addons/loaders/STLLoader.js";
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0b0c0e);
+const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 5000);
+camera.position.set(0, 0, 220);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+document.body.appendChild(renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
+scene.add(new THREE.AmbientLight(0xf3bfa3, 0.35));
+const key = new THREE.DirectionalLight(0xfce6d6, 1.4); key.position.set(1, 1, 1); scene.add(key);
+const rim = new THREE.DirectionalLight(0xa9d9c0, 0.9); rim.position.set(-1, 0.4, -1); scene.add(rim);
+
+document.getElementById("file").addEventListener("change", (e) => {
+  const f = e.target.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    const geo = new STLLoader().parse(reader.result);
+    geo.center();
+    geo.computeVertexNormals();
+    const mat = new THREE.MeshStandardMaterial({ color: 0xf3bfa3, metalness: 0.25, roughness: 0.45 });
+    const mesh = new THREE.Mesh(geo, mat);
+    scene.add(mesh);
+    geo.computeBoundingSphere();
+    camera.position.set(0, 0, geo.boundingSphere.radius * 2.6);
+    document.getElementById("stats").textContent =
+      "Triangles: " + (geo.attributes.position.count / 3).toLocaleString();
+  };
+  reader.readAsArrayBuffer(f);
+});
+
+addEventListener("resize", () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+(function loop() {
+  requestAnimationFrame(loop);
+  controls.update();
+  renderer.render(scene, camera);
+})();
+</script>
+</body>
+</html>
