@@ -170,6 +170,49 @@ export default function TechnologyPage() {
         </div>
       </section>
 
+      <section className="mx-auto mt-[10vh] max-w-5xl">
+        <motion.h2
+          initial={{ opacity: 0, y: 26 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-12% 0px" }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          style={{ fontFamily: "var(--font-clash)" }}
+          className="max-w-2xl text-[clamp(26px,3.8vw,52px)] font-medium uppercase leading-[1.08] tracking-tight text-peach"
+        >
+          Heavy results.
+          <br />
+          Featherweight machine.
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: "-12% 0px" }}
+          transition={{ duration: 0.8, delay: 0.1 }}
+          className="mt-7 max-w-xl text-[clamp(14px,1.3vw,17px)] leading-[1.9] tracking-wide text-peach/65"
+        >
+          Most reconstruction tools reach for gigabyte frameworks to do what is, at heart, geometry. DicomForge was engineered the other way around: every dependency questioned, every byte accounted for, until the entire forge fits where other stacks cannot even finish installing. Constraint was not the obstacle. It was the design brief.
+        </motion.p>
+        <div className="mt-14 grid grid-cols-1 gap-10 sm:grid-cols-3">
+          {[
+            { t: "512 MB ceiling", d: "The forge lives inside a strict memory budget. Slice caps and adaptive downsampling guarantee a conversion never dies midway." },
+            { t: "Sleeps when idle", d: "The deployment spins down between sessions and wakes on demand. The interface covers the warm-up so users are never staring at silence." },
+            { t: "Nothing exotic", d: "Pinned scientific libraries with prebuilt wheels. Builds are reproducible, deploys are boring, and boring is what production should be." },
+          ].map((c, i) => (
+            <motion.div
+              key={c.t}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-10% 0px" }}
+              transition={{ duration: 0.7, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+              className="border-t border-peach/15 pt-5"
+            >
+              <p className="text-[11px] uppercase tracking-[0.3em] text-mint">{c.t}</p>
+              <p className="mt-3 text-sm leading-relaxed tracking-wide text-peach/60">{c.d}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
       <section className="mx-auto mt-[8vh] grid max-w-5xl grid-cols-1 gap-x-12 gap-y-14 sm:grid-cols-2">
         {STATS.map((s) => (
           <Stat key={s.label} v={s.v} suffix={s.suffix} label={s.label} />
