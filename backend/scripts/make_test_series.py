@@ -30,7 +30,7 @@ vol = np.zeros((N, SIZE, SIZE), dtype=np.int16)
 vol[outer < 1.0] = 1000
 vol[inner < 1.0] = 120
 rng = np.random.default_rng(7)
-vol = (vol + rng.normal(0, 12, vol.shape)).astype(np.int16)
+vol = (vol + rng.normal(0, 12, vol.shape) * (vol > 0)).astype(np.int16)
 
 for i in range(N):
     meta = FileMetaDataset()
