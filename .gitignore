@@ -21,3 +21,4 @@ backend/venv/
 Thumbs.db
 .vscode/
 .idea/
+backend/test_series/
