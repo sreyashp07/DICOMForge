@@ -6,6 +6,7 @@ import PageTransition from "@/components/ui/PageTransition";
 import Menu from "@/components/ui/Menu";
 import CustomCursor from "@/components/ui/CustomCursor";
 import DFLogo from "@/components/ui/DFLogo";
+import AccessIcon from "@/components/ui/AccessIcon";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import AuthProvider from "@/context/AuthContext";
 
@@ -35,6 +36,7 @@ export default function RootLayout({
             {children}
             <Menu />
             <DFLogo />
+            <AccessIcon />
           </PageTransition>
         </SmoothScroll>
         </AuthProvider>
