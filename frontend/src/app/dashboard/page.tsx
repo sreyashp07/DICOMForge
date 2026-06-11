@@ -292,14 +292,18 @@ function ForgeFloor() {
 
         <p className="mt-5 text-[9px] uppercase tracking-[0.4em] text-mint">Archive</p>
         <div className="mt-2 flex max-h-[34vh] flex-col gap-1.5 overflow-y-auto pr-1">
-          {DEMOS.map((d) => (
+          {DEMOS.map((d, i) => (
             <button
               key={d.id}
               onClick={() => loadDemo(d)}
               disabled={!!phase}
-              className="border border-peach/15 px-3 py-2.5 text-left text-[10px] uppercase tracking-[0.25em] text-peach/70 transition-colors duration-300 hover:border-mint hover:text-mint disabled:opacity-50"
+              className="group/item flex items-center justify-between border border-peach/15 border-l-2 border-l-transparent px-3 py-2.5 text-left text-[10px] uppercase tracking-[0.25em] text-peach/70 transition-all duration-300 hover:border-l-mint hover:bg-mint/[0.06] hover:text-peach disabled:opacity-50"
             >
-              {d.name}
+              <span className="flex items-baseline gap-2.5">
+                <span className="text-[8px] tracking-[0.3em] text-mint/60 transition-colors duration-300 group-hover/item:text-mint">{String(i + 1).padStart(2, "0")}</span>
+                <span className="transition-transform duration-300 group-hover/item:translate-x-1">{d.name}</span>
+              </span>
+              <span className="-translate-x-1 text-mint opacity-0 transition-all duration-300 group-hover/item:translate-x-0 group-hover/item:opacity-100">&gt;</span>
             </button>
           ))}
         </div>
