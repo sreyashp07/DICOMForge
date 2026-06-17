@@ -19,7 +19,7 @@ export default function AccessIcon() {
       whileHover="hover"
       whileTap={{ scale: 0.92 }}
       className="group fixed top-6 z-[9600] flex h-11 items-center justify-end"
-      style={{ right: "calc(clamp(20px, 5vw, 64px) + 52px)" }}
+      style={{ right: "calc(clamp(16px, 5vw, 64px) + 46px)" }}
     >
       <motion.span
         variants={{
