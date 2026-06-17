@@ -148,7 +148,7 @@ export default function TechnologyPage() {
             {STEPS.map((s) => (
               <article
                 key={s.n}
-                className="absolute left-1/2 top-1/2 w-[clamp(300px,44vw,560px)] border border-peach/15 bg-surface/75 p-9 backdrop-blur-sm"
+                className="absolute left-1/2 top-1/2 w-[min(88vw,560px)] border border-peach/15 bg-surface/75 p-6 backdrop-blur-sm md:p-9"
                 style={{ willChange: "transform, opacity" }}
               >
                 <p className="text-[10px] tracking-[0.4em] text-mint">{s.n}</p>
