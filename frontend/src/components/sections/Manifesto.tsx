@@ -58,7 +58,7 @@ export default function Manifesto() {
         >
           <HoverWords
             text={PARA_1}
-            className="text-[clamp(15px,1.4vw,19px)] leading-[1.9] tracking-wide text-peach/70"
+            className="text-[15px] leading-[1.85] tracking-wide text-peach/70 md:text-[clamp(15px,1.4vw,19px)] md:leading-[1.9]"
           />
         </motion.div>
         <motion.div
@@ -69,7 +69,7 @@ export default function Manifesto() {
         >
           <HoverWords
             text={PARA_2}
-            className="text-[clamp(15px,1.4vw,19px)] leading-[1.9] tracking-wide text-peach/70"
+            className="text-[15px] leading-[1.85] tracking-wide text-peach/70 md:text-[clamp(15px,1.4vw,19px)] md:leading-[1.9]"
           />
         </motion.div>
       </div>
@@ -84,7 +84,7 @@ export default function Manifesto() {
           <p className="mb-6 text-[10px] uppercase tracking-[0.5em] text-mint">Why it matters</p>
           <HoverWords
             text={PARA_3}
-            className="text-[clamp(15px,1.4vw,19px)] leading-[1.9] tracking-wide text-peach/70"
+            className="text-[15px] leading-[1.85] tracking-wide text-peach/70 md:text-[clamp(15px,1.4vw,19px)] md:leading-[1.9]"
           />
         </motion.div>
         <motion.div
