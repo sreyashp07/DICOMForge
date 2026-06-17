@@ -58,3 +58,23 @@ html.lenis body {
     transform: translateX(100%);
   }
 }
+
+/* Mobile and touch hygiene */
+@media (hover: none), (pointer: coarse) {
+  * {
+    cursor: auto !important;
+  }
+}
+
+html,
+body {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  body {
+    cursor: auto;
+  }
+}
