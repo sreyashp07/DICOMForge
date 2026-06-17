@@ -68,7 +68,7 @@ export default function HoloViewer({
   return (
     <div className="absolute inset-0">
       <Canvas
-        dpr={[1, 1.5]}
+        dpr={typeof window !== "undefined" && window.innerWidth < 768 ? [1, 1] : [1, 1.5]}
         gl={{ antialias: true, alpha: true }}
         camera={{ position: [0, 36, 175], fov: 42 }}
       >
