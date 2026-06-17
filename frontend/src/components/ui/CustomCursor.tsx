@@ -1,105 +1,95 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
-    if (window.matchMedia("(pointer: coarse)").matches) return;
-    document.documentElement.classList.add("has-custom-cursor");
+    if (typeof window === "undefined") return;
+    const coarse = window.matchMedia("(pointer: coarse)").matches;
+    const noHover = window.matchMedia("(hover: none)").matches;
+    const touch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+    if (coarse || noHover || touch) {
+      setEnabled(false);
+      return;
+    }
+    setEnabled(true);
+  }, []);
 
-    let x = window.innerWidth / 2;
-    let y = window.innerHeight / 2;
-    let rx = x;
-    let ry = y;
-    let scale = 1;
-    let targetScale = 1;
-    let angle = 0;
+  useEffect(() => {
+    if (!enabled) return;
+    let rx = window.innerWidth / 2;
+    let ry = window.innerHeight / 2;
+    let dx = rx;
+    let dy = ry;
     let raf = 0;
 
-    const onMove = (e: PointerEvent) => {
-      x = e.clientX;
-      y = e.clientY;
+    const move = (e: MouseEvent) => {
+      dx = e.clientX;
+      dy = e.clientY;
       if (dotRef.current) {
-        dotRef.current.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+        dotRef.current.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
       }
-    };
-
-    const isInteractive = (t: EventTarget | null) =>
-      t instanceof Element && !!t.closest("a, button, [data-cursor]");
-
-    const onOver = (e: Event) => {
-      if (isInteractive(e.target)) targetScale = 2.2;
-    };
-    const onOut = (e: Event) => {
-      if (isInteractive(e.target)) targetScale = 1;
     };
 
     const loop = () => {
-      rx += (x - rx) * 0.16;
-      ry += (y - ry) * 0.16;
-      scale += (targetScale - scale) * 0.14;
-      angle = (angle + 1.1) % 360;
+      rx += (dx - rx) * 0.18;
+      ry += (dy - ry) * 0.18;
       if (ringRef.current) {
-        ringRef.current.style.transform = `translate3d(${rx}px, ${ry}px, 0) translate(-50%, -50%) scale(${scale}) rotate(${angle}deg)`;
+        ringRef.current.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
       }
       raf = requestAnimationFrame(loop);
     };
+
+    window.addEventListener("mousemove", move);
     raf = requestAnimationFrame(loop);
-
-    window.addEventListener("pointermove", onMove, { passive: true });
-    document.addEventListener("mouseover", onOver, true);
-    document.addEventListener("mouseout", onOut, true);
-
     return () => {
+      window.removeEventListener("mousemove", move);
       cancelAnimationFrame(raf);
-      window.removeEventListener("pointermove", onMove);
-      document.removeEventListener("mouseover", onOver, true);
-      document.removeEventListener("mouseout", onOut, true);
-      document.documentElement.classList.remove("has-custom-cursor");
     };
-  }, []);
+  }, [enabled]);
+
+  if (!enabled) return null;
 
   return (
-    <>
+    <div aria-hidden="true" style={{ mixBlendMode: "difference" }}>
+      <div
+        ref={ringRef}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: 34,
+          height: 34,
+          marginLeft: -17,
+          marginTop: -17,
+          borderRadius: 9999,
+          border: "1px solid rgba(243,191,163,0.7)",
+          background:
+            "radial-gradient(circle, rgba(169,217,192,0.10), transparent 70%)",
+          pointerEvents: "none",
+          zIndex: 9999,
+        }}
+      />
       <div
         ref={dotRef}
-        aria-hidden="true"
         style={{
           position: "fixed",
           top: 0,
           left: 0,
           width: 5,
           height: 5,
+          marginLeft: -2.5,
+          marginTop: -2.5,
           borderRadius: 9999,
-          backgroundColor: "var(--color-peach)",
+          backgroundColor: "var(--color-peach-bloom)",
           pointerEvents: "none",
-          zIndex: 10000,
-          mixBlendMode: "difference",
+          zIndex: 9999,
         }}
       />
-      <div
-        ref={ringRef}
-        aria-hidden="true"
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: 26,
-          height: 26,
-          borderRadius: 9999,
-          background:
-            "conic-gradient(from 0deg, var(--color-peach), var(--color-mint), var(--color-peach))",
-          WebkitMask:
-            "radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px))",
-          mask: "radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px))",
-          pointerEvents: "none",
-          zIndex: 10000,
-          mixBlendMode: "difference",
-        }}
-      />
-    </>
+    </div>
   );
 }
