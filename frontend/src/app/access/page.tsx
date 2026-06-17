@@ -47,7 +47,7 @@ export default function AccessPage() {
   };
 
   return (
-    <main className="relative flex min-h-dvh items-stretch overflow-hidden bg-ink text-peach">
+    <main className="relative flex min-h-dvh flex-col items-stretch overflow-hidden bg-ink text-peach md:flex-row">
       <div className="hidden flex-1 flex-col items-center justify-center gap-10 md:flex">
         <motion.svg
           width="min(26vw, 300px)"
@@ -87,7 +87,7 @@ export default function AccessPage() {
         </motion.p>
       </div>
 
-      <div className="flex flex-1 items-center justify-center px-6 py-24">
+      <div className="flex flex-1 items-center justify-center px-5 py-20 md:py-24">
         <motion.div
           key={shake}
           animate={{ x: shake ? [0, -11, 11, -7, 7, -3, 0] : 0 }}
