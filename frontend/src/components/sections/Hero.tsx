@@ -48,7 +48,7 @@ export default function Hero() {
           <motion.div
             key={b.label}
             aria-hidden="true"
-            className="pointer-events-none absolute hidden md:block"
+            className="pointer-events-none absolute hidden lg:block"
             style={{ left: b.x, top: b.y }}
             initial={{ opacity: 0, y: 26 }}
             animate={{ opacity: 1, y: 0 }}
