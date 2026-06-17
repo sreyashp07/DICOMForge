@@ -183,7 +183,7 @@ export default function TestimonialsPage() {
             {DOCTORS.map((d) => (
               <article
                 key={d.name}
-                className="absolute left-1/2 top-1/2 w-[clamp(270px,32vw,400px)]"
+                className="absolute left-1/2 top-1/2 w-[min(82vw,400px)]"
                 style={{ willChange: "transform, opacity" }}
               >
                 <div className="group border border-peach/15 bg-surface/80 p-7 backdrop-blur-sm transition-all duration-300 hover:z-50 hover:scale-[1.07] hover:border-mint/70 hover:bg-surface hover:shadow-[0_0_50px_rgba(169,217,192,0.12)]">
