@@ -50,7 +50,7 @@ export default function ChatGuide() {
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Close forge guide" : "Open forge guide"}
         whileHover={{ scale: 1.08 }}
-        className="fixed bottom-6 right-6 z-[9400] flex h-12 w-12 items-center justify-center rounded-full border border-mint/40"
+        className="fixed bottom-5 right-5 z-[9400] flex h-12 w-12 items-center justify-center rounded-full border border-mint/40 md:bottom-6 md:right-6"
         style={{
           background:
             "radial-gradient(circle at 35% 30%, rgba(169,217,192,0.25), rgba(11,12,14,0.9))",
@@ -71,10 +71,10 @@ export default function ChatGuide() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 18, scale: 0.97, transition: { duration: 0.25 } }}
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed bottom-[5.5rem] right-6 z-[9400] flex w-[min(92vw,340px)] flex-col border border-peach/15 bg-surface/85 backdrop-blur-xl"
+            className="fixed bottom-20 right-4 left-4 z-[9400] flex flex-col border border-peach/15 bg-surface/90 backdrop-blur-xl sm:left-auto sm:right-6 sm:bottom-[5.5rem] sm:w-[min(92vw,340px)]"
           >
             <div className="flex items-center gap-3 border-b border-peach/10 px-4 py-3">
-              <div className="h-12 w-12">
+              <div className="h-12 w-12 shrink-0">
                 <GuideOrb thinking={thinking} />
               </div>
               <div>
@@ -87,7 +87,7 @@ export default function ChatGuide() {
               </div>
             </div>
 
-            <div ref={listRef} className="flex max-h-[44vh] min-h-[200px] flex-col gap-3 overflow-y-auto px-4 py-4">
+            <div ref={listRef} className="flex max-h-[44vh] min-h-[180px] flex-col gap-3 overflow-y-auto px-4 py-4" data-lenis-prevent>
               {msgs.map((m, i) => (
                 <div
                   key={i}
@@ -118,7 +118,7 @@ export default function ChatGuide() {
                 onKeyDown={(e) => e.key === "Enter" && send()}
                 placeholder="Ask the guide"
                 spellCheck={false}
-                className="flex-1 bg-transparent text-[12px] tracking-wide text-peach outline-none placeholder:text-peach/30"
+                className="flex-1 bg-transparent text-base tracking-wide text-peach outline-none placeholder:text-peach/30 sm:text-[12px]"
                 style={{ fontFamily: "var(--font-space)", caretColor: "var(--color-mint)" }}
               />
               <button
