@@ -78,6 +78,7 @@ function ForgeFloor() {
   const [paused, setPaused] = useState(false);
   const [clock, setClock] = useState("");
   const [forgeCount, setForgeCount] = useState(0);
+  const [panelsOpen, setPanelsOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -110,6 +111,7 @@ function ForgeFloor() {
   const loadDemo = async (demo: (typeof DEMOS)[number]) => {
     if (phase) return;
     setError(null);
+    setPanelsOpen(false);
     try {
       const res = await fetch(demo.file);
       if (!res.ok) throw new Error();
@@ -147,6 +149,7 @@ function ForgeFloor() {
     files.forEach((f) => fd.append("slices", f));
     setPhase("upload");
     setUploadPct(0);
+    setPanelsOpen(false);
 
     try {
       const res = await api.post("/api/forge", fd, {
@@ -208,16 +211,16 @@ function ForgeFloor() {
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute left-1/2 top-7 z-30 flex -translate-x-1/2 flex-col items-center gap-1.5 text-center"
+        className="absolute left-1/2 top-5 z-30 flex -translate-x-1/2 flex-col items-center gap-1.5 px-4 text-center md:top-7"
       >
         <p
           style={{ fontFamily: "var(--font-clash)" }}
-          className="text-xl font-semibold uppercase tracking-tight"
+          className="text-base font-semibold uppercase tracking-tight md:text-xl"
         >
           <ScrambleText text={`Hey, ${user?.name ?? "Operator"}`} autoStart delay={1.0} framesPerChar={6} />
         </p>
-        <p className="text-[9px] uppercase tracking-[0.35em] text-mint">{clock}</p>
-        <p className="text-[9px] uppercase tracking-[0.3em] text-peach/40">
+        <p className="text-[8px] uppercase tracking-[0.3em] text-mint md:text-[9px] md:tracking-[0.35em]">{clock}</p>
+        <p className="hidden text-[9px] uppercase tracking-[0.3em] text-peach/40 sm:block">
           Forges: {forgeCount}
           {typeof window !== "undefined" && localStorage.getItem("df_last_forge")
             ? ` - Last: ${localStorage.getItem("df_last_forge")}`
@@ -226,17 +229,31 @@ function ForgeFloor() {
       </motion.div>
 
       {!geometry && !phase && (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-6">
           <p
             style={{ fontFamily: "var(--font-space)" }}
-            className="text-[11px] uppercase tracking-[0.5em] text-peach/40"
+            className="text-center text-[10px] uppercase tracking-[0.4em] text-peach/40 md:text-[11px] md:tracking-[0.5em]"
           >
             <ScrambleText text="Select a demo or upload a series" autoStart delay={1.2} framesPerChar={7} />
           </p>
         </div>
       )}
 
-      <Panel className="absolute left-[clamp(16px,4vw,56px)] top-28 z-30 w-64" delay={0.9}>
+      {/* Mobile control toggle */}
+      <button
+        onClick={() => setPanelsOpen((v) => !v)}
+        className="absolute right-4 top-20 z-40 border border-peach/25 bg-surface/70 px-4 py-2 text-[9px] uppercase tracking-[0.35em] text-peach backdrop-blur-md transition-colors duration-300 hover:border-mint hover:text-mint md:hidden"
+      >
+        {panelsOpen ? "Close" : "Controls"}
+      </button>
+
+      {/* Specimen panel - desktop floating, mobile in drawer */}
+      <Panel
+        className={`absolute left-4 top-28 z-30 w-[min(78vw,16rem)] md:left-[clamp(16px,4vw,56px)] ${
+          panelsOpen ? "block" : "hidden"
+        } md:block`}
+        delay={0.9}
+      >
         <p className="text-[9px] uppercase tracking-[0.4em] text-mint">Specimen</p>
         {meta ? (
           <div className="mt-3 flex flex-col gap-2">
@@ -271,7 +288,14 @@ function ForgeFloor() {
         )}
       </Panel>
 
-      <Panel className="absolute right-[clamp(16px,4vw,56px)] top-28 z-30 w-64" delay={1.1} dur={8}>
+      {/* Intake panel */}
+      <Panel
+        className={`absolute right-4 top-28 z-30 w-[min(78vw,16rem)] md:right-[clamp(16px,4vw,56px)] ${
+          panelsOpen ? "block" : "hidden"
+        } md:block`}
+        delay={1.1}
+        dur={8}
+      >
         <p className="text-[9px] uppercase tracking-[0.4em] text-mint">Forge intake</p>
         <button
           onClick={() => inputRef.current?.click()}
@@ -309,21 +333,21 @@ function ForgeFloor() {
         </div>
       </Panel>
 
-      <div className="absolute bottom-7 left-1/2 z-30 flex -translate-x-1/2 flex-col items-center gap-2">
-        {error && (
-          <p className="text-[10px] uppercase tracking-[0.3em] text-[#E8917C]">
+      {error && (
+        <div className="absolute bottom-20 left-1/2 z-30 flex -translate-x-1/2 px-4 md:bottom-7">
+          <p className="text-center text-[10px] uppercase tracking-[0.3em] text-[#E8917C]">
             <ScrambleText key={error} text={error} autoStart framesPerChar={4} />
           </p>
-        )}
-        <p className="text-[9px] uppercase tracking-[0.4em] text-peach/30">Forge floor</p>
-      </div>
+        </div>
+      )}
 
+      {/* Logout: bottom-LEFT on mobile to avoid the chat orb, original spot on desktop */}
       <button
         onClick={() => {
           logout();
           navigate("/access");
         }}
-        className="absolute bottom-7 right-[clamp(16px,4vw,56px)] z-30 text-[9px] uppercase tracking-[0.4em] text-peach/40 transition-colors duration-300 hover:text-mint"
+        className="absolute bottom-6 left-4 z-30 text-[9px] uppercase tracking-[0.4em] text-peach/40 transition-colors duration-300 hover:text-mint md:bottom-7 md:left-auto md:right-[clamp(16px,4vw,56px)]"
       >
         Log out
       </button>
